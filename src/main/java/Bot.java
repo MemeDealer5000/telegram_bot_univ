@@ -1,8 +1,5 @@
-import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.ApiContext;
-import org.telegram.telegrambots.meta.TelegramBotsApi;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -47,6 +44,7 @@ public class Bot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         Model model = new Model();
         Message message = update.getMessage();
+        Weather weather = new Weather("http://api.openweathermap.org/data/2.5/weather?q=","&units=metric&APPID=7b01b298bf35aa5cb8ec786809f26953");
         chat_id = message.getChatId();
         if (message != null && message.hasText()) {
             switch (message.getText()){
@@ -64,7 +62,7 @@ public class Bot extends TelegramLongPollingBot {
                     break;
                 default:
                     try{
-                        sendMsg(message, Weather.getWeather(message.getText(), model));
+                        sendMsg(message, weather.getWeather(message.getText(), model));
                     } catch (IOException e) {
                         sendMsg(message, "Такого города нет");
                     }
@@ -83,7 +81,6 @@ public class Bot extends TelegramLongPollingBot {
         KeyboardRow keyboardFirstRow = new KeyboardRow();
         keyboardFirstRow.add(new KeyboardButton("/help"));
         keyboardFirstRow.add(new KeyboardButton("/settings"));
-
         keyboardRow.add(keyboardFirstRow);
         keyboard.setKeyboard(keyboardRow);
     }

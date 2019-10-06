@@ -1,3 +1,4 @@
+import org.glassfish.jersey.message.internal.Token;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -8,20 +9,36 @@ import java.net.URL;
 import java.util.Scanner;
 
 public class Weather {
-    // 7b01b298bf35aa5cb8ec786809f26953
-    // http://api.openweathermap.org/data/2.5/forecast?id=524901&APPID={7b01b298bf35aa5cb8ec786809f26953}
+    // "&units=metric&APPID=7b01b298bf35aa5cb8ec786809f26953"
+    // "http://api.openweathermap.org/data/2.5/weather?q="
+    private  String Url;
+    private   String Token;
 
-    public static String getWeather(String message, Model model) throws IOException {
-        String result = "";
-        String url_raw = "http://api.openweathermap.org/data/2.5/weather?q=" + message +"&units=metric&APPID=7b01b298bf35aa5cb8ec786809f26953";
+    public String getUrl() { return  Url; }
+    public String getToken() { return  Token; }
+
+    public  Weather(String apiURL, String apiToken){
+        this.Url = apiURL;
+        this.Token = apiToken;
+    }
+
+    private static String getApiURL(String url,String message, String token){
+        StringBuilder url_raw = new StringBuilder(url);
+        url_raw.append(message);
+        url_raw.append(token);
+        return  url_raw.toString();
+    }
+
+    public  String getWeather(String message, Model model) throws IOException {
+        StringBuilder result = new StringBuilder();
+        String url_raw = getApiURL(Url,message, Token);
         URL url = new URL(url_raw);
-        System.out.println(message);
 
         Scanner in = new Scanner((InputStream)url.getContent());
         while(in.hasNext()) {
-            result += in.nextLine();
+            result.append(in.nextLine());
         }
-        JSONObject object = new JSONObject(result);
+        JSONObject object = new JSONObject(result.toString());
 
         model.setName(object.getString("name"));
 

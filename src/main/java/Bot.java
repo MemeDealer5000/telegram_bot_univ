@@ -52,10 +52,13 @@ public class Bot extends TelegramLongPollingBot {
                     sendMsg(message, "Ну че народ,погнали,нахуй?");
                     break;
                 case "/help":
-                    sendMsg(message, "Напиши Привет,чтоб увидеть приветствие \nНапиши название города, чтоб увидеть погоду");
+                    sendMsg(message, "Напиши Привет,чтоб увидеть приветствие \nНапиши название города, чтоб увидеть погоду ");
                     break;
                 case "/settings":
                     sendMsg(message,"What should we set?");
+                    break;
+                case "/makers":
+                    sendMsg(message,"\nДаниил Тасс,\nХрущев Александр,\nРавнушкин Семен");
                     break;
                 case "Привет":
                     sendMsg(message,"И тебе привет,человек)");

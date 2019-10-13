@@ -73,6 +73,14 @@ public class Bot extends TelegramLongPollingBot {
                     list.add(note);
                     sendMsg(message,"Заметка успешно сохранена:");
                     break;
+                case "/showNotes":
+                    var notes = userAndNotes.get(chat_id);
+                    var notesText = new StringBuilder();
+                    for (Note raw_note : notes){
+                        notesText.append(raw_note.getNoteMessage() + '\n');
+                    }
+                    sendMsg(message, notesText.toString());
+                    break;
                 case "Привет":
                     sendMsg(message,"И тебе привет,человек)");
                     break;

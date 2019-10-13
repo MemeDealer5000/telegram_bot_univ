@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -21,7 +22,7 @@ public class Bot extends TelegramLongPollingBot {
     private static  String BOT_TOKEN = "962457052:AAEvBUAG1YAy3UX8b4famZNUfn0BpP75LHs";
     private  static  String BOT_NAME = "weather_report_test_bot";
     private long chat_id;
-
+    private HashMap<Long,ArrayList<Note>> userAndNotes = new HashMap<>();
     protected Bot(DefaultBotOptions botOptions) {
         super(botOptions);
     }
@@ -46,8 +47,11 @@ public class Bot extends TelegramLongPollingBot {
         Message message = update.getMessage();
         Weather weather = new Weather("http://api.openweathermap.org/data/2.5/weather?q=","&units=metric&APPID=7b01b298bf35aa5cb8ec786809f26953");
         chat_id = message.getChatId();
+        var raw_command_line = message.getText().split(" ");
+        var command = raw_command_line[0];
+
         if (message != null && message.hasText()) {
-            switch (message.getText()){
+            switch (command){
                 case "/start":
                     sendMsg(message, "Ну че народ,погнали,нахуй?");
                     break;
@@ -59,6 +63,15 @@ public class Bot extends TelegramLongPollingBot {
                     break;
                 case "/makers":
                     sendMsg(message,"\nДаниил Тасс,\nХрущев Александр,\nРавнушкин Семен");
+                    break;
+                case "/makeNote":
+                    var note = new Note(raw_command_line[1], chat_id);
+                    if (!userAndNotes.containsKey(chat_id)) {
+                        userAndNotes.put(chat_id, new ArrayList<Note>());
+                    }
+                    var list = userAndNotes.get(chat_id);
+                    list.add(note);
+                    sendMsg(message,"Заметка успешно сохранена:");
                     break;
                 case "Привет":
                     sendMsg(message,"И тебе привет,человек)");

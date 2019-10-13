@@ -65,7 +65,7 @@ public class Bot extends TelegramLongPollingBot {
                     sendMsg(message,"\nДаниил Тасс,\nХрущев Александр,\nРавнушкин Семен");
                     break;
                 case "/makeNote":
-                    var noteText = message.getText().substring(raw_command_line[1].length()-1);
+                    var noteText = message.getText().substring(raw_command_line[0].length()+raw_command_line[1].length()-1);
                     var note = new Note(raw_command_line[1], noteText, chat_id);
                     var text = reminder.addNote(note);
                     sendMsg(message,text);

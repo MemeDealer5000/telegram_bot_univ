@@ -18,7 +18,7 @@ public class Reminder {
         var notes = userAndNotes.get(chat_id);
         var notesText = new StringBuilder();
         for (Note raw_note : notes){
-            notesText.append(raw_note.getNoteMessage() + '\n');
+            notesText.append(raw_note.getNoteDate().toString()+ ' '+raw_note.getNoteMessage() + '\n');
         }
         return  notesText.toString();
     }

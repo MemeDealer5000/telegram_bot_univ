@@ -22,7 +22,7 @@ public class Bot extends TelegramLongPollingBot {
     private static  String BOT_TOKEN = "962457052:AAEvBUAG1YAy3UX8b4famZNUfn0BpP75LHs";
     private  static  String BOT_NAME = "weather_report_test_bot";
     private long chat_id;
-    private HashMap<Long,ArrayList<Note>> userAndNotes = new HashMap<>();
+    private Reminder reminder = new Reminder();
     protected Bot(DefaultBotOptions botOptions) {
         super(botOptions);
     }
@@ -66,20 +66,12 @@ public class Bot extends TelegramLongPollingBot {
                     break;
                 case "/makeNote":
                     var note = new Note(raw_command_line[1], chat_id);
-                    if (!userAndNotes.containsKey(chat_id)) {
-                        userAndNotes.put(chat_id, new ArrayList<Note>());
-                    }
-                    var list = userAndNotes.get(chat_id);
-                    list.add(note);
-                    sendMsg(message,"Заметка успешно сохранена:");
+                    var text = reminder.addNote(note);
+                    sendMsg(message,text);
                     break;
                 case "/showNotes":
-                    var notes = userAndNotes.get(chat_id);
-                    var notesText = new StringBuilder();
-                    for (Note raw_note : notes){
-                        notesText.append(raw_note.getNoteMessage() + '\n');
-                    }
-                    sendMsg(message, notesText.toString());
+                    var notesText = reminder.showNotes(chat_id);
+                    sendMsg(message, notesText);
                     break;
                 case "Привет":
                     sendMsg(message,"И тебе привет,человек)");

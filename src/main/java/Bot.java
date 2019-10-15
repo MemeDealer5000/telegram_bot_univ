@@ -131,14 +131,4 @@ public class Bot extends TelegramLongPollingBot {
     public String getBotToken() {
         return BOT_TOKEN;
     }
-    void checkNotificationsAsynchronously(final Bot bot) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true){
-                    bot.checkNotificationToSend();
-                }
-            }
-        }).start();
-    }
 }

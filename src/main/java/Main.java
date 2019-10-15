@@ -22,9 +22,6 @@ public class Main {
         try {
             telegramBotsApi.registerBot(myBot);
             System.out.println("Bot registered");
-            while(true) {
-                myBot.checkNotificationsAsynchronously(myBot);
-            }
         } catch (TelegramApiException e){
             System.out.println("Error is here");
             e.printStackTrace();

@@ -11,8 +11,9 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
+
 
 
 public class Bot extends TelegramLongPollingBot {
@@ -22,7 +23,7 @@ public class Bot extends TelegramLongPollingBot {
     private static  String BOT_TOKEN = "962457052:AAEvBUAG1YAy3UX8b4famZNUfn0BpP75LHs";
     private  static  String BOT_NAME = "weather_report_test_bot";
     private long chat_id;
-    private Reminder reminder = new Reminder();
+    public Reminder reminder = new Reminder();
     protected Bot(DefaultBotOptions botOptions) {
         super(botOptions);
     }
@@ -84,6 +85,27 @@ public class Bot extends TelegramLongPollingBot {
                         sendMsg(message, "Такого города нет");
                     }
             }
+
+        }
+    }
+
+    public void checkNotificationToSend(){
+        var chat_ids = reminder.getUserAndNotes().keySet();
+        for(Long id : chat_ids){
+            var listOfNotifications = reminder.getUserAndNotes().get(id);
+            for (Note note : listOfNotifications){
+                if (note.getNoteDate() == new Date()){
+                    SendMessage sendMessage = new SendMessage();
+                    sendMessage.setChatId(note.getChatId());
+                    sendMessage.enableMarkdown(true);
+                    sendMessage.setText("Ваше событие: " + note.getNoteMessage()+ " началось!");
+                    try{
+                        execute(sendMessage);
+                    } catch (TelegramApiException e){
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
     }
 
@@ -108,5 +130,15 @@ public class Bot extends TelegramLongPollingBot {
 
     public String getBotToken() {
         return BOT_TOKEN;
+    }
+    void checkNotificationsAsynchronously(final Bot bot) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true){
+                    bot.checkNotificationToSend();
+                }
+            }
+        }).start();
     }
 }

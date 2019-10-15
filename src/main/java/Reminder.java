@@ -1,7 +1,9 @@
+
 import java.util.ArrayList;
+
 import java.util.HashMap;
 
-public class Reminder {
+public class Reminder  {
     private static  HashMap<Long, ArrayList<Note>> userAndNotes = new HashMap<>();
 
     public String addNote(Note note){
@@ -23,6 +25,10 @@ public class Reminder {
         return  notesText.toString();
     }
 
+    public HashMap<Long, ArrayList<Note>> getUserAndNotes(){
+        return  userAndNotes;
+    }
+
     public String deleteNote(Note note){
         var chat_id = note.getChatId();
         if (userAndNotes.containsKey(chat_id)){
@@ -32,4 +38,5 @@ public class Reminder {
         }
         return  "Note not found";
     }
+
 }

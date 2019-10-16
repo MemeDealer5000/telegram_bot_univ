@@ -51,7 +51,7 @@ public class Reminder extends TimerTask {
     public SendMessage checkNotificationToSend(){
         var chat_ids = userAndNotes.keySet();
         SendMessage msg = new SendMessage();
-        msg.setChatId("-1");
+        msg.setText("");
         for(Long id : chat_ids){
             var listOfNotifications = userAndNotes.get(id);
             for (Note note : listOfNotifications){
@@ -67,7 +67,7 @@ public class Reminder extends TimerTask {
     @Override
     public void run() {
         var result = checkNotificationToSend();
-        if (!result.equals("")){
+        if (!result.getText().equals("")){
             relatedBot.sendNotificaton(result);
         }
     }

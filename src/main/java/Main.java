@@ -25,7 +25,7 @@ public class Main {
         try {
             telegramBotsApi.registerBot(myBot);
             System.out.println("Bot registered");
-            timer.schedule(myBot.reminder, 0, 40000);
+            timer.schedule(myBot.reminder, 0, 4000);
 
         } catch (TelegramApiException e){
             System.out.println("Error is here");

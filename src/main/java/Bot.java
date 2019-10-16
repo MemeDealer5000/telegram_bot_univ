@@ -84,6 +84,8 @@ public class Bot extends TelegramLongPollingBot {
                     var notesText = reminder.showNotes(chat_id);
                     sendMsg(message, notesText);
                     break;
+                case "/showSysTime":
+                    sendMsg(message,new Date().toString());
                 case "Привет":
                     sendMsg(message,"И тебе привет,человек)");
                     break;

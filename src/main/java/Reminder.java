@@ -55,7 +55,7 @@ public class Reminder extends TimerTask {
         for(Long id : chat_ids){
             var listOfNotifications = userAndNotes.get(id);
             for (Note note : listOfNotifications){
-                if (Math.abs(note.getNoteDate().getTime() - new Date().getTime())<100){
+                if (Math.abs(note.getNoteDate().getTime() - new Date().getTime())<10000){
                     msg.setChatId(id);
                     msg.setText( "Ваше событие: " + note.getNoteMessage()+ " началось!");
                 }

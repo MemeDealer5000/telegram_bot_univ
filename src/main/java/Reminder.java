@@ -1,11 +1,20 @@
 
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+
 import java.util.ArrayList;
 
+import java.util.Date;
 import java.util.HashMap;
+import java.util.TimerTask;
 
-public class Reminder  {
+public class Reminder extends TimerTask {
     private static  HashMap<Long, ArrayList<Note>> userAndNotes = new HashMap<>();
 
+    public Reminder(Bot relatedBot){
+        this.relatedBot = relatedBot;
+    }
+
+    private Bot relatedBot;
     public String addNote(Note note){
         var chat_id = note.getChatId();
         if (!userAndNotes.containsKey(chat_id)) {
@@ -39,4 +48,27 @@ public class Reminder  {
         return  "Note not found";
     }
 
+    public SendMessage checkNotificationToSend(){
+        var chat_ids = userAndNotes.keySet();
+        SendMessage msg = new SendMessage();
+        msg.setChatId("-1");
+        for(Long id : chat_ids){
+            var listOfNotifications = userAndNotes.get(id);
+            for (Note note : listOfNotifications){
+                if (Math.abs(note.getNoteDate().getTime() - new Date().getTime())<100){
+                    msg.setChatId(id);
+                    msg.setText( "Ваше событие: " + note.getNoteMessage()+ " началось!");
+                }
+            }
+        }
+        return  msg;
+    }
+
+    @Override
+    public void run() {
+        var result = checkNotificationToSend();
+        if (!result.equals("")){
+            relatedBot.sendNotificaton(result);
+        }
+    }
 }

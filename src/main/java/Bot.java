@@ -23,7 +23,7 @@ public class Bot extends TelegramLongPollingBot {
     private static  String BOT_TOKEN = "962457052:AAEvBUAG1YAy3UX8b4famZNUfn0BpP75LHs";
     private  static  String BOT_NAME = "weather_report_test_bot";
     private long chat_id;
-    public Reminder reminder = new Reminder();
+    public Reminder reminder = new Reminder(this);
     protected Bot(DefaultBotOptions botOptions) {
         super(botOptions);
     }
@@ -41,6 +41,15 @@ public class Bot extends TelegramLongPollingBot {
             e.printStackTrace();
         }
 
+    }
+
+    public void sendNotificaton(SendMessage msg){
+        msg.enableMarkdown(true);
+        try {
+            execute(msg);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 
     public void onUpdateReceived(Update update) {
@@ -86,26 +95,6 @@ public class Bot extends TelegramLongPollingBot {
                     }
             }
 
-        }
-    }
-
-    public void checkNotificationToSend(){
-        var chat_ids = reminder.getUserAndNotes().keySet();
-        for(Long id : chat_ids){
-            var listOfNotifications = reminder.getUserAndNotes().get(id);
-            for (Note note : listOfNotifications){
-                if (note.getNoteDate() == new Date()){
-                    SendMessage sendMessage = new SendMessage();
-                    sendMessage.setChatId(note.getChatId());
-                    sendMessage.enableMarkdown(true);
-                    sendMessage.setText("Ваше событие: " + note.getNoteMessage()+ " началось!");
-                    try{
-                        execute(sendMessage);
-                    } catch (TelegramApiException e){
-                        e.printStackTrace();
-                    }
-                }
-            }
         }
     }
 

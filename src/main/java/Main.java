@@ -4,6 +4,8 @@ import org.telegram.telegrambots.meta.ApiContext;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.Timer;
+
 public class Main {
 
     private static String PROXY_HOST = "162.243.28.56" /* proxy host */;
@@ -19,9 +21,12 @@ public class Main {
         // Select proxy type: [HTTP|SOCKS4|SOCKS5] (default: NO_PROXY)
         botOptions.setProxyType(DefaultBotOptions.ProxyType.SOCKS5);
         Bot myBot = new Bot(botOptions);
+        Timer timer = new Timer();
         try {
             telegramBotsApi.registerBot(myBot);
             System.out.println("Bot registered");
+            timer.schedule(myBot.reminder, 0, 40000);
+
         } catch (TelegramApiException e){
             System.out.println("Error is here");
             e.printStackTrace();

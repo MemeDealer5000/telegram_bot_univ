@@ -75,8 +75,8 @@ public class Bot extends TelegramLongPollingBot {
                     sendMsg(message,"\nДаниил Тасс,\nХрущев Александр,\nРавнушкин Семен");
                     break;
                 case "/makeNote":
-                    var noteText = message.getText().substring(raw_command_line[0].length()+raw_command_line[1].length()+2);
-                    var note = new Note(raw_command_line[1], noteText, chat_id);
+                    var noteText = message.getText().substring(raw_command_line[0].length()+raw_command_line[1].length()+raw_command_line[2].length()+3);
+                    var note = new Note(raw_command_line[1]+' '+ raw_command_line[2], noteText, chat_id);
                     var text = reminder.addNote(note);
                     sendMsg(message,text);
                     break;
@@ -86,6 +86,7 @@ public class Bot extends TelegramLongPollingBot {
                     break;
                 case "/showSysTime":
                     sendMsg(message,new Date().toString());
+                    break;
                 case "Привет":
                     sendMsg(message,"И тебе привет,человек)");
                     break;

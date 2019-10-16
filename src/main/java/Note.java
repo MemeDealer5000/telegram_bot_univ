@@ -29,7 +29,7 @@ public class Note {
     }
 
     private Date convertStringToDate(String date) throws ParseException {
-        var format = new SimpleDateFormat("dd.MM.yyyy");
+        var format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         return format.parse(date);
     }
 }
